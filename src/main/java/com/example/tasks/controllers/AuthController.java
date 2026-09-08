@@ -3,11 +3,13 @@ package com.example.tasks.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.tasks.config.JwtManager;
 import com.example.tasks.dto.UserDTO;
 import com.example.tasks.dto.UserLoginDTO;
 import com.example.tasks.dto.UserRegisterDTO;
 import com.example.tasks.services.AuthService;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,4 +35,16 @@ public class AuthController {
         );
     }    
     
+    @GetMapping("/data")
+    public ResponseEntity<UserDTO> getAccountnfo(
+        HttpServletRequest request
+    ) {
+        return ResponseEntity.ok(
+            JwtManager.getDataFromToken( 
+                JwtManager.getTokenFromHeader(
+                    request.getHeader("Authorization")
+                ) 
+            )
+        );
+    }
 }
